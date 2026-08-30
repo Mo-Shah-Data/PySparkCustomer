@@ -36,3 +36,6 @@ How many transactions does each customer make?
 
 Final output: A cleaned, joined customer-transaction dataset plus a summarized dataset containing
 customer ID, customer name, total transactions, total quantity purchased, and total spending.
+
+# Got to chapter 2
+Chapter 2. Your first data program in PySpark
