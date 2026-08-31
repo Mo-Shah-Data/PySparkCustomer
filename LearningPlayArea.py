@@ -1,12 +1,6 @@
-spark.read
+# The task in chapter 2
 
-dir(spark.read.text)
-
-book.show()# chec its input parameters to change shape of output and sample of data.
-
-## The task in chapter 2
-
-from pyspark.sql.functions import col,split, explode, lower, regexp_extract
+from pyspark.sql.functions import col,split, explode, lower, regexp_extract, length
 from pyspark.sql import SparkSession
 
 spark = (SparkSession
@@ -35,17 +29,25 @@ words_clean.show(15)
 words_nonull = words_clean.filter(col("word") != "")
 words_nonull.show()
 
-from pyspark.sql import functions as F
+# words_nonull.select(length(col("word")).alias("length")).groupby("length").count()
 
-path = "/tmp/pushdown"
+results = words_nonull.groupby(col("word")).count()
 
-(spark.range(0, 20_000_000, numPartitions=16)
- .select(
-     F.col("id"),
-     (F.col("id") % 1000).alias("k"),
-     F.rand().alias("v"))
- .write.mode("overwrite")
- .parquet(path))
+results.orderBy(col("count").desc()).show()
 
-df = spark.read.parquet(path)
-df.where(F.col("id") < 1000).explain(True)
+results.coalesce(1).write.csv("simple_count.csv")
+
+# from pyspark.sql import functions as F
+#
+# path = "/tmp/pushdown"
+#
+# (spark.range(0, 20_000_000, numPartitions=16)
+#  .select(
+#      F.col("id"),
+#      (F.col("id") % 1000).alias("k"),
+#      F.rand().alias("v"))
+#  .write.mode("overwrite")
+#  .parquet(path))
+#
+# df = spark.read.parquet(path)
+# df.where(F.col("id") < 1000).explain(True)

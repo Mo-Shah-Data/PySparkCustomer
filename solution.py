@@ -30,5 +30,8 @@ print(group_customer_id)
 customer_id_counts = customers_df.groupby(col("customer_id")).count()
 print(customer_id_counts)
 
+customer_counts = customers_df.groupby(col("state", "city")).count()
+print(customer_id_counts)
+
 
 customer_id_counts.orderBy(col("count").desc()).show()
