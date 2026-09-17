@@ -37,6 +37,15 @@ spark.sql("select * from transactions where customer_id IS NOT NULL order by cus
 spark.catalog
 
 spark.catalog.listTables()
+spark.sql("CREATE TABLE customers_tbl AS SELECT * FROM customers")
+spark.catalog.analyzeTable("customers_tbl")
+
+spark.sql("ANALYZE TABLE customers_tbl COMPUTE STATISTICS FOR COLUMNS customer_id")
+spark.sql("DESCRIBE EXTENDED customers_tbl customer_id").show(truncate=False)
+
+spark.catalog.dropTempView("customers")
+
+spark.catalog.listTables()
 
 # Data Cleaning
 # Lower case all text values
