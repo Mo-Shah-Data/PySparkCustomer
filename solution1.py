@@ -31,21 +31,23 @@ spark.sql("select * from customers order by customer_id").show(20)
 # transactions table has a lot of nulls in customer_id col
 spark.sql("select * from transactions where customer_id IS NOT NULL order by customer_id").show(100)
 # join
-(spark.sql("select * FROM customers INNER JOIN transactions ON transactions.customer_id=customers.customer_id")
- .show(20, truncate=False))
-
-spark.catalog
-
+spark.sql("""
+    CACHE TABLE all_customers_transactions
+    OPTIONS ('storageLevel' = 'MEMORY_ONLY')
+    AS SELECT * FROM customers LEFT JOIN transactions USING (customer_id)
+""")
+# spark.catalog
+#
 spark.catalog.listTables()
-spark.sql("CREATE TABLE customers_tbl AS SELECT * FROM customers")
-spark.catalog.analyzeTable("customers_tbl")
-
-spark.sql("ANALYZE TABLE customers_tbl COMPUTE STATISTICS FOR COLUMNS customer_id")
-spark.sql("DESCRIBE EXTENDED customers_tbl customer_id").show(truncate=False)
-
-spark.catalog.dropTempView("customers")
-
-spark.catalog.listTables()
+# spark.sql("CREATE TABLE customers_tbl AS SELECT * FROM customers")
+# spark.catalog.analyzeTable("customers_tbl")
+#
+# spark.sql("ANALYZE TABLE customers_tbl COMPUTE STATISTICS FOR COLUMNS customer_id")
+# spark.sql("DESCRIBE EXTENDED customers_tbl customer_id").show(truncate=False)
+#
+# spark.catalog.dropTempView("customers")
+#
+# spark.catalog.listTables()
 
 # Data Cleaning
 # Lower case all text values
