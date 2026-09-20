@@ -39,3 +39,6 @@ customer ID, customer name, total transactions, total quantity purchased, and to
 
 # Got to chapter 2
 Chapter 2. Your first data program in PySpark
+
+# Questions for Ali Additional to the ones in code.
+Should you as of good practice normalise all data in coluns or prioritise keys?

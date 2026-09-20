@@ -25,20 +25,91 @@ transactions_df.filter(F.col("customer_id").isNull()).count()
 customers_df.createOrReplaceTempView("customers")
 transactions_df.createOrReplaceTempView("transactions")
 
-
+## Customer Table
 # customers needs further cleaning
 spark.sql("select * from customers order by customer_id").show(20)
+# row counts for both tables
+spark.sql("select count(*) AS customers from customers").show()
+spark.sql("select count(*) AS transactions from transactions").show()
+
+# count nulls in primary keys
+spark.sql("SELECT count(customer_id) AS cust_id_null FROM customers WHERE customer_id IS NULL").show(100)
+spark.sql("SELECT count(customer_id) AS cust_id_not_null FROM customers WHERE customer_id IS NOT NULL").show(100)
+
+spark.sql("SELECT customer_id FROM customers WHERE customer_id IN (' ','NULL','CUST-0599901','N/A','NA','-','none') ").show(100)
+
+# shows a mixture of cases and possibly leading and trailing spaces.
+spark.sql("SELECT customer_id FROM customers ORDER BY customer_id DESC").show(100)
+
+spark.sql("""
+    CREATE OR REPLACE TEMP VIEW customers_clean AS
+    SELECT *
+    FROM (
+        SELECT
+            * EXCEPT (customer_id),
+            nullif(lower(trim(customer_id)), '') AS customer_id
+        FROM customers
+    )
+    WHERE customer_id IS NOT NULL
+""")
+
+spark.sql("SELECT * FROM customers_clean").show()
+# drop old temp view - causing issues
+# spark.catalog.dropTempView("customers")
+
+spark.sql("SELECT count(customer_id) AS cust_id_null FROM customers_clean WHERE customer_id IS NULL").show(100)
+
+
+# Transactions Table
 # transactions table has a lot of nulls in customer_id col
+spark.sql("""
+    SELECT  count(*) - count(customer_id) AS NULL_cust_id,
+            count(*) - count(transaction_id) AS NULL_trans_id
+            FROM transactions WHERE customer_id IS NULL
+            """).show(100)
+
 spark.sql("select * from transactions where customer_id IS NOT NULL order by customer_id").show(100)
+
+spark.sql("""
+    CREATE OR REPLACE TEMP VIEW transactions_clean AS
+    SELECT *
+    FROM (
+        SELECT
+            * EXCEPT (customer_id, transaction_id),
+            nullif(lower(trim(customer_id)), '')    AS customer_id,
+            nullif(lower(trim(transaction_id)), '') AS transaction_id
+        FROM transactions
+    )
+    WHERE transaction_id IS NOT NULL
+      AND customer_id IS NOT NULL
+""")
+
 # join
 spark.sql("""
     CACHE TABLE all_customers_transactions
     OPTIONS ('storageLevel' = 'MEMORY_ONLY')
-    AS SELECT * FROM customers LEFT JOIN transactions USING (customer_id)
+    AS SELECT * FROM customers_clean LEFT JOIN transactions_clean USING (customer_id)
 """)
+
+# Cleaning in spark sql
+# customer table
+
+
+
+# ToDo: Raise with Ali that teh cleaning of the key columns can also be done with a utils.py script that makes it simpler
+# This avoids duplicate code and allows testing but is this better?
+# SQL is below
+
+
+
 # spark.catalog
 #
 spark.catalog.listTables()
+
+spark.sql("SELECT * FROM all_customers_transactions").show(100)
+
+
+
 # spark.sql("CREATE TABLE customers_tbl AS SELECT * FROM customers")
 # spark.catalog.analyzeTable("customers_tbl")
 #

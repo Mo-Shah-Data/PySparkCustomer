@@ -14,7 +14,7 @@ customers_df = (spark.read.option("header",True).option("ignoreLeadingWhiteSpace
 transactions_df = (spark.read.option("header",True).option("ignoreLeadingWhiteSpace", True)
                    .option("ignoreTrailingWhiteSpace", True).csv(transactions_df_path))
 
-# .createOrReplaceTempView("employees")
+# .createOrReplaceTempView("employees") - DONE
 
 customers_df.show()
 transactions_df.show()
