@@ -84,12 +84,30 @@ spark.sql("""
       AND customer_id IS NOT NULL
 """)
 
+spark.sql("""
+    SELECT count(*) AS rows,
+           count(*) - count(customer_id)    AS null_customer_id,
+           count(*) - count(transaction_id) AS null_transaction_id
+    FROM transactions_clean
+""").show()
+
 # join
 spark.sql("""
     CACHE TABLE all_customers_transactions
     OPTIONS ('storageLevel' = 'MEMORY_ONLY')
     AS SELECT * FROM customers_clean LEFT JOIN transactions_clean USING (customer_id)
 """)
+
+df = spark.table("all_customers_transactions")
+
+# Standard Physical Plan (Default)
+df.explain()
+
+# The Full Journey (Parsed, Analyzed, Optimized, Physical)
+df.explain(mode="extended")
+
+# A Cleaner, Formatted View of the Physical Plan
+df.explain(mode="formatted")
 
 # Cleaning in spark sql
 # customer table

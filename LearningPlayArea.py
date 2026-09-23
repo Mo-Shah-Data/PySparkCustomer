@@ -1,6 +1,11 @@
 # The task in chapter 2
 
-from pyspark.sql.functions import col,split, explode, lower, regexp_extract, length
+from pyspark.sql.functions import (col,
+                                   split,
+                                   explode,
+                                   lower,
+                                   regexp_extract,
+                                   length)
 from pyspark.sql import SparkSession
 
 spark = (SparkSession
@@ -36,18 +41,3 @@ results = words_nonull.groupby(col("word")).count()
 results.orderBy(col("count").desc()).show()
 
 results.coalesce(1).write.csv("simple_count.csv")
-
-# from pyspark.sql import functions as F
-#
-# path = "/tmp/pushdown"
-#
-# (spark.range(0, 20_000_000, numPartitions=16)
-#  .select(
-#      F.col("id"),
-#      (F.col("id") % 1000).alias("k"),
-#      F.rand().alias("v"))
-#  .write.mode("overwrite")
-#  .parquet(path))
-#
-# df = spark.read.parquet(path)
-# df.where(F.col("id") < 1000).explain(True)
