@@ -96,6 +96,8 @@ transactions_duplicates.show(10, truncate=False)                             # e
 # these get counted several times below, so avoid recomputing the parse+shuffle
 # Todo: find out when and where and why to use cache options - what are they for?
 # Todo: what is the differnec between cache and persist(differnet kinds of persists)
+# https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.persist.html
+
 customers_clean.cache()
 transactions_clean.cache()
 print("customers:", customers_df.count(), "->", customers_clean.count())

@@ -32,6 +32,8 @@ spark.sql("select * from customers order by customer_id").show(20)
 spark.sql("select count(*) AS customers from customers").show()
 spark.sql("select count(*) AS transactions from transactions").show()
 
+
+# ToDo - Use Summary functions
 # count nulls in primary keys
 spark.sql("SELECT count(customer_id) AS cust_id_null FROM customers WHERE customer_id IS NULL").show(100)
 spark.sql("SELECT count(customer_id) AS cust_id_not_null FROM customers WHERE customer_id IS NOT NULL").show(100)
@@ -103,6 +105,7 @@ df = spark.table("all_customers_transactions")
 # Standard Physical Plan (Default)
 df.explain()
 
+# ToDo - How do these work and what are the stages?
 # The Full Journey (Parsed, Analyzed, Optimized, Physical)
 df.explain(mode="extended")
 
@@ -114,11 +117,11 @@ df.explain(mode="formatted")
 
 
 
-# ToDo: Raise with Ali that teh cleaning of the key columns can also be done with a utils.py script that makes it simpler
+# ToDo: Raise with Ali that teh cleaning of the key columns can also be done with a utils.py script that makes it simpler - don't use yet
 # This avoids duplicate code and allows testing but is this better?
 # SQL is below
 
-
+# Todo - Create and  use window functions, and transactions min and max based on the day - get creative on advanced functions/ from previous weeks
 
 # spark.catalog
 #
