@@ -10,6 +10,10 @@ spark = (SparkSession
          .appName("Analysis of Customers and Transactions.")
          .getOrCreate())
 
+# setting error level as we dont want to see too many unimportant errors
+spark.sparkContext.setLogLevel("ERROR")
+
+# Step 1 - read in all raw data from CSVs and show result
 customers_df_path = "data/customers"
 transactions_df_path = "data/transactions"
 
@@ -18,12 +22,38 @@ customers_df = (spark.read.option("header",True).option("ignoreLeadingWhiteSpace
 transactions_df = (spark.read.option("header",True).option("ignoreLeadingWhiteSpace", True)
                    .option("ignoreTrailingWhiteSpace", True).csv(transactions_df_path))
 
-customers_df.show()
-transactions_df.show()
-transactions_df.filter(F.col("customer_id").isNull()).count()
+print("\n=== customers schema ===")
+customers_df.printSchema()
 
+print("\n=== transactions schema ===")
+transactions_df.printSchema()
+
+
+# Stage 2 - get into tempview and apply sql to clean data
+## table summaries - shows counts of rows with mean and other output values.
+
+print("\n=== customers summary ===")
+customers_df.summary().show()
+
+print("\n=== transactions summary ===")
+transactions_df.summary().show()
+
+## dropDuplicates - safe to run now as it is looking for completely identical rows
+customers = customers_df.dropDuplicates()
+transactions = transactions_df.dropDuplicates()
+
+print("\n=== customers summary post duplicate removal ===")
+customers_df.summary().show()
+
+print("\n=== transactions summary post duplicate removal ===")
+transactions_df.summary().show()
+
+## create temp views for dataframes
 customers_df.createOrReplaceTempView("customers")
 transactions_df.createOrReplaceTempView("transactions")
+
+
+
 
 ## Customer Table
 # customers needs further cleaning
