@@ -290,6 +290,13 @@ spark.sql("""
     FROM transactions_clean
 """).show(vertical=True)
 
+# now time to join customers with transactions
+# customers with a transaction - also analyse spend per customer
+# customers without a transaction -where are most of these customers from in order by most customers
+# customers buying specific product(Desk Lamp and Power Bank) and average quantity
+
+
+
 
 
 ## OLD Code from here on

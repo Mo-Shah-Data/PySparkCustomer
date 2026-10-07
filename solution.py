@@ -67,9 +67,9 @@ transactions_nonull = transactions_df.select(*[
     F.col("transaction_id").isNotNull() & (F.col("transaction_id") != "")
 )
 
-# ToDo: drop duplicate customers
-#Todo: how does this work - this is a common interview question
-# ToDo: if i want to drop duplicate and pick which duplicate to drop, maybe earliest maybe one with a empty column?
+# ToDo: drop duplicate customers - done ###
+#Todo: how does this work - this is a common interview question - done ###
+# ToDo: if i want to drop duplicate and pick which duplicate to drop, maybe earliest maybe one with a empty column? -empty column not done
 # ToDo: what if iwant to drop duplicates based on multiple columns? how to do this
 print("dropping duplicates")
 customers_clean = customers_nonull.dropDuplicates(["customer_id"])
