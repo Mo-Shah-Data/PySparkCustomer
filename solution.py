@@ -35,7 +35,7 @@ customer_id_counts.orderBy(F.col("count").desc()).show()
 
 # count nulls in primary keys before cleaning
 
-# ToDo This in spark sql
+# ToDo This in spark sql - done ###
 customers_df.select([
     F.count(F.when(F.col(c).isNull(), c)).alias(c)
     for c in ["customer_id"]
@@ -67,7 +67,7 @@ transactions_nonull = transactions_df.select(*[
     F.col("transaction_id").isNotNull() & (F.col("transaction_id") != "")
 )
 
-#drop duplicate customers
+# ToDo: drop duplicate customers
 #Todo: how does this work - this is a common interview question
 # ToDo: if i want to drop duplicate and pick which duplicate to drop, maybe earliest maybe one with a empty column?
 # ToDo: what if iwant to drop duplicates based on multiple columns? how to do this
@@ -78,7 +78,7 @@ cust_duplicates = (customers_clean
          .count()
          .filter(F.col("count") > 1))
 
-# Todo explain parameters such as those available like truncate
+# Todo explain parameters such as those available like truncate - done ###
 print("duplicate customer_ids remaining:", cust_duplicates.count())  # expect 0
 cust_duplicates.show(10, truncate=False)        # expect empty
 
