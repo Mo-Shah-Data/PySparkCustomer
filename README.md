@@ -44,4 +44,10 @@ Chapter 2. Your first data program in PySpark
 Should you as of good practice normalise all data in coluns or prioritise keys?
 
 # To do now
+ for this week 
 
+Windows functions – Learn All functions
+
+Learn how aggregation functions work – count min max
+
+Sampling techniques – with Spark SQL
