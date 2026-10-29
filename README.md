@@ -51,3 +51,19 @@ Windows functions – Learn All functions
 Learn how aggregation functions work – count min max
 
 Sampling techniques – with Spark SQL
+
+
+
+
+# Using sparkvps
+type 'ssh sparkvps' in the terminal
+scp -r C:\Users\Mohsi\PycharmProjects\Coursera\PySparkCustomer\data sparkvps:~/
+
+# Things to cover
+1. Subqueries
+2. CTEs
+3. Window functions
+4. How does drop duplicates work
+5. Everything you write explain
+6. Why nullif?
+7. 

@@ -5,12 +5,7 @@ from pyspark.errors import AnalysisException
 import pyspark.sql.functions as F
 import pyspark.sql.types as T
 
-spark = SparkSession.builder.getOrCreate()
-
-spark = (SparkSession
-         .builder
-         .appName("Analysis of Customers and Transactions.")
-         .getOrCreate())
+spark = SparkSession.builder.appName("Analysis of Customers and Transactions.").remote("sc://localhost:15002").getOrCreate()
 
 # setting error level as we dont want to see too many unimportant errors
 spark.sparkContext.setLogLevel("ERROR")
