@@ -66,4 +66,7 @@ scp -r C:\Users\Mohsi\PycharmProjects\Coursera\PySparkCustomer\data sparkvps:~/
 4. How does drop duplicates work
 5. Everything you write explain
 6. Why nullif?
-7. 
+
+
+use 
+python -i solution.py to run interactively
