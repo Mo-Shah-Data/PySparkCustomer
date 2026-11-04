@@ -1,0 +1,6 @@
+
+output/
+spark-warehouse/
+metastore_db/
+derby.log
+data_home_backup/
